@@ -22,6 +22,19 @@ var chatHandler = function() {
       $input = $("#chat-controls input[name='message']");
       $input.attr("value", "");
       $input.focus();
+    },
+    
+    sendMessage: function(webSocket) {
+      var messageObject = {
+        "nick": $("input[name='nick']").attr('value'),
+        "message": $("input[name='message']").attr('value')
+      };
+
+      if (messageObject.nick != "" && messageObject.message != "") {
+        webSocket.send(JSON.stringify(messageObject));
+        chatHandler.addMessageToChatLog(messageObject.nick, messageObject.message);
+        chatHandler.clearAndFocusOnMessageInput();
+      }
     }
   };
 }();
@@ -34,14 +47,7 @@ $(document).ready(function() {
   };
 
   $("#chat-controls button[name='send']").click(function() {
-    var messageObject = {
-      "nick": $("input[name='nick']").attr('value'),
-      "message": $("input[name='message']").attr('value')};
-
-      if (messageObject.nick != "" && messageObject.message != "") {
-        webSocket.send(JSON.stringify(messageObject));
-        chatHandler.addMessageToChatLog(messageObject.nick, messageObject.message);
-        chatHandler.clearAndFocusOnMessageInput();
-      }
-    });
+    chatHandler.sendMessage(webSocket);
   });
+
+});
