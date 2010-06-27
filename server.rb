@@ -3,54 +3,59 @@ require 'bundler'
 Bundler.setup
 
 require 'eventmachine'
+require 'em-websocket'
 require 'json'
 
-class ChatServer < EventMachine::Connection
-  def self.start(host = '127.0.0.1', port = 8000)
-    @@channel = EM::Channel.new
-    EM.start_server(host, port, self)
+module WebSocketChat
+  module Connection
+    attr_accessor :sid
+    
+    def send_message_unless_current(message)
+      unless message[:sid] == sid
+        send message.to_json
+      end
+    end
   end
   
-  # Send message to a connection, unless the sender is same as the current
-  # connection
-  def send_message(message)
-    puts "@sid = #{@sid}, message[:sid] = #{message[:sid]}"
-    unless @sid == message[:sid]
-      sid_copy = message.delete :sid
-      send_data(message.to_json + "\n")
+  class Messages
+    def self.to_hash(sid, raw_msg)
+      msg_hash = JSON(raw_msg)
       
-      message[:sid] = sid_copy
+      if msg_hash.has_key? 'nick' and msg_hash.has_key? 'message'
+        return msg_hash.merge(:sid => sid)
+      else
+        puts ">> invalid message format: 'nick' and/or 'message' missing"
+      end
+    rescue JSON::ParserError => ex
+      puts ">> invalid message format: #{ex}"
     end
-  end
-  
-   def post_init
-    puts "-- someone connected to the chat server"
-    @sid = @@channel.subscribe { |m| send_message(m) }
-  end
-
-  def receive_data(data)
-    if data =~ /^QUIT/
-      close_connection
-      return nil
-    end
-    
-    puts "-- connection with SID #{@sid} sent data (#{data.strip} (stripped)) to chat server"
-    data_hash = JSON(data)
-    
-    if data_hash.has_key? 'name' and data_hash.has_key? 'msg'
-      puts ">> pushing message to channel by SID #{@sid}"
-      @@channel.push(data_hash.merge({:sid => @sid}))
-    end
-  rescue JSON::ParserError => ex
-    puts ">> invalid data: #{ex}"
-  end
-
-  def unbind
-    @@channel.unsubscribe(@sid)
   end
 end
+
+EventMachine::WebSocket::Connection.send :include, WebSocketChat::Connection
 
 EM.run do
-  ChatServer.start
+  @channel = EM::Channel.new
+  
+  EventMachine::WebSocket.start(:host => '127.0.0.1', :port => 8000) do |ws|
+    ws.onopen {
+      puts "-- someone opened WebSocket to the chat server"
+      ws.sid = @channel.subscribe { |m| ws.send_message_unless_current(m) }
+      
+      puts ">> assigned SID #{ws.sid}"
+    }
+    
+    ws.onmessage { |raw_msg|
+      puts "-- user with SID #{ws.sid} sent data to server"
+      
+      msg_hash = WebSocketChat::Messages.to_hash(ws.sid, raw_msg)
+      @channel.push(msg_hash) if msg_hash
+      puts ">> data was pushed to channel" if msg_hash
+    }
+    
+    ws.onclose {
+      puts "-- user with SID #{ws.sid} closed WebSocket connection"
+      @channel.unsubscribe(ws.sid)
+    }
+  end
 end
-
