@@ -13,7 +13,6 @@ var chatHandler = function() {
 
 $(document).ready(function() {
 	var webSocket = new WebSocket("ws://127.0.0.1:8000");
-	
 	webSocket.onmessage = function(evt) {
 		var obj = $.parseJSON(evt.data);
 		chatHandler.addMessageToChatLog(obj.nick, obj.message);
