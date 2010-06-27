@@ -10,6 +10,8 @@ h2. Features
 h2. Usage
 
 # clone the repo
+# Install the *bundler* gem if you haven't already: <code>gem install bundler</code>
+# Install dependencies using *bundler*: <code>bundle install</code>
 # Start the server: <code>$ cd server; ruby server.rb</code>
 # Fire up few browser instances and point them to <code>/[path you cloned it to]/client/chat.html</code>
 # Write your nickname, message and press *Send* - it should appear on other browsers you have started
