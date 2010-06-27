@@ -49,5 +49,13 @@ $(document).ready(function() {
   $("#chat-controls button[name='send']").click(function() {
     chatHandler.sendMessage(webSocket);
   });
-
+  
+  
+  $("#chat-controls input").keypress(function(event) {
+    if (event.keyCode == '13') {
+      event.preventDefault();
+      
+      chatHandler.sendMessage(webSocket);
+    }
+  });
 });
