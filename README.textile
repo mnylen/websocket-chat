@@ -2,9 +2,23 @@ h2. What?
 
 A very simple web chat that uses WebSockets on the client side and Ruby EventMachine (with em-websocket) at the server side.
 
+h2. Features
+
+* Automatic scrolling of chat log
+* Automatic refocus on message input after the previous message have been sent
+
 h2. Usage
 
 # clone the repo
 # Start the server: <code><pre>$ cd server; ruby server.rb</pre></code>
 # Fire up few browser instances and point them to <code>/[path you cloned it to]/client/chat.html</code>
-# Write your nickname, message and press *Send*
+# Write your nickname, message and press *Send* - it should appear on other browsers you have started
+
+Runs the server on *localhost* on port *8080*. The client is hardcoded to connect to that server and port. If you want to modify these, you need to modify the source.
+
+h2. Future improvements
+
+* Allow specifying the host and the port the server should run on
+* Allow specifying the host and the port the client should connect to
+* Allow registering nicknames and displaying a list of already registered nicknames
+* Show message after user enters or parts the chat 
