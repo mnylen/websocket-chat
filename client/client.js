@@ -16,6 +16,12 @@ var chatHandler = function() {
     autoScrollToBottom: function() {
       var scrollTop = $("#chat-log")[0].scrollHeight
       $("#chat-log").scrollTop(scrollTop);
+    },
+    
+    clearAndFocusOnMessageInput: function() {
+      $input = $("#chat-controls input[name='message']");
+      $input.attr("value", "");
+      $input.focus();
     }
   };
 }();
@@ -35,6 +41,7 @@ $(document).ready(function() {
       if (messageObject.nick != "" && messageObject.message != "") {
         webSocket.send(JSON.stringify(messageObject));
         chatHandler.addMessageToChatLog(messageObject.nick, messageObject.message);
+        chatHandler.clearAndFocusOnMessageInput();
       }
     });
   });
