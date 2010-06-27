@@ -1,14 +1,16 @@
 var chatHandler = function() {
   return {
     addMessageToChatLog: function(nick, message) {
-      var messageDiv = $("<div />").addClass("message");
-      $("<span />").addClass("sender").append(nick).appendTo(messageDiv);
-      $(messageDiv).append(" ");
-      $("<span />").addClass("message").append(message).appendTo(messageDiv);
-
-      $(messageDiv).appendTo($("#chat-frame"));
-
+      chatHandler.createMessageContainer(nick, message).appendTo($("#chat-frame"));
       chatHandler.autoScrollToBottom();
+    },
+    
+    createMessageContainer: function(nick, message) {
+      var $messageDiv = $("<div />").addClass("message");
+      $("<span />").addClass("sender").append(nick).appendTo($messageDiv);
+      $messageDiv.append(" ");
+      $("<span />").addClass("message").append(message).appendTo($messageDiv);
+      return $messageDiv;
     },
 
     autoScrollToBottom: function() {
