@@ -7,6 +7,13 @@ var chatHandler = function() {
 			$("<span />").addClass("message").append(message).appendTo(messageDiv);
 			
 			$(messageDiv).appendTo($("#chat-frame"));
+			
+			chatHandler.autoScrollToBottom();
+		},
+		
+		autoScrollToBottom: function() {
+			var scrollTop = $("#chat-frame")[0].scrollHeight
+			$("#chat-frame").scrollTop(scrollTop);
 		}
 	};
 }();
