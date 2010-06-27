@@ -1,7 +1,7 @@
 var chatHandler = function() {
   return {
     addMessageToChatLog: function(nick, message) {
-      chatHandler.createMessageContainer(nick, message).appendTo($("#chat-frame"));
+      chatHandler.createMessageContainer(nick, message).appendTo($("#chat-log"));
       chatHandler.autoScrollToBottom();
     },
     
@@ -14,8 +14,8 @@ var chatHandler = function() {
     },
 
     autoScrollToBottom: function() {
-      var scrollTop = $("#chat-frame")[0].scrollHeight
-      $("#chat-frame").scrollTop(scrollTop);
+      var scrollTop = $("#chat-log")[0].scrollHeight
+      $("#chat-log").scrollTop(scrollTop);
     }
   };
 }();
