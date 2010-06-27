@@ -29,9 +29,14 @@ class ChatServer < EventMachine::Connection
   end
 
   def receive_data(data)
+    if data =~ /^QUIT/
+      close_connection
+      return nil
+    end
+    
     puts "-- connection with SID #{@sid} sent data (#{data.strip} (stripped)) to chat server"
     data_hash = JSON(data)
-
+    
     if data_hash.has_key? 'name' and data_hash.has_key? 'msg'
       puts ">> pushing message to channel by SID #{@sid}"
       @@channel.push(data_hash.merge({:sid => @sid}))
@@ -41,7 +46,7 @@ class ChatServer < EventMachine::Connection
   end
 
   def unbind
-    ChatChannel.unsubscribe(@sid)
+    @@channel.unsubscribe(@sid)
   end
 end
 
