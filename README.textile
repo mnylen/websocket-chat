@@ -1,0 +1,10 @@
+h2. What?
+
+A very simple web chat that uses WebSockets on the client side and Ruby EventMachine (with em-websocket) at the server side.
+
+h2. Usage
+
+# clone the repo
+# Start the server: <code><pre>$ cd server; ruby server.rb</pre></code>
+# Fire up few browser instances and point them to <code>/[path you cloned it to]/client/chat.html</code>
+# Write your nickname, message and press *Send*
