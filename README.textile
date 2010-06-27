@@ -10,7 +10,7 @@ h2. Features
 h2. Usage
 
 # clone the repo
-# Start the server: <code><pre>$ cd server; ruby server.rb</pre></code>
+# Start the server: <code>$ cd server; ruby server.rb</code>
 # Fire up few browser instances and point them to <code>/[path you cloned it to]/client/chat.html</code>
 # Write your nickname, message and press *Send* - it should appear on other browsers you have started
 
