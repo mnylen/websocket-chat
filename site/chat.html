@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+    <title>WebSockets chat</title>
+    
+    <style type="text/css">
+      body { font-family:Verdana, Arial, Sans-Serif; font-size:0.8em; padding:10px; }
+      
+      #chat-frame { height:300px; border:1px solid #ded; padding:10px; overflow:auto; }
+      div.message { margin-bottom:15px; padding-bottom:3px; border-bottom:1px dashed #ddd; }
+      div.message span.sender  { font-weight:bold; font-size:0.9em; }
+      div.message span.message { }
+      
+      div#chat-controls input[name="nickname"] { width:100px;}
+      div#chat-controls input[name="message"] { width:400px; }
+    </style>
+  </head>
+  <body>
+    <h1>Chat</h1>
+    
+    <div id="chat-frame">
+      <div class="message">
+        <span class="sender">mnylen</span>
+        <span class="message">Hello, World!</span>
+      </div>
+      
+      <div class="message">
+        <span class="sender">mnylen</span>
+        <span class="message">Hello, World!</span>
+      </div>
+    </div>
+    
+    <div id="chat-controls">
+      <p>Say something:
+        <input type="text" name="nickname" placeholder="Set your nick">
+        <input type="text" name="message" placeholder="Type something">
+        <button type="button" name="send">Send</button>
+    </div>
+  </body>
+</html>
