@@ -9,27 +9,32 @@
     <style type="text/css">
       body { font-family:Verdana, Arial, Sans-Serif; font-size:0.8em; padding:10px; }
       
-      #chat-log { height:300px; border:1px solid #ded; padding:10px; overflow:auto; }
+      div#chat { display:none; }
+      div#chat div#log { height:300px; border:1px solid #ded; padding:10px; overflow:auto; }
       div.message { margin-bottom:15px; padding-bottom:3px; border-bottom:1px dashed #ddd; }
       div.message span.sender  { font-weight:bold; font-size:0.9em; }
-      div.message span.message { }
-      
-      div#chat-log input[name="nick"] { width:100px;}
-      div#chat-log input[name="message"] { width:400px; }
+      div.message span.message { }    
+      #chat input { width:400px; }
     </style>
   </head>
   <body>
     <h1>Chat</h1>
     
-    <div id="chat-log">
+    <div id="registration">
+      <h2>Join chat</h2>
       
+      Nickname <input type="text" name="nick">
+      <button type="button" name="register">Join chat</button>
     </div>
-
-    <div id="chat-controls">
-      <p>Say something:
-        <input type="text" name="nick" placeholder="Set your nick" autofocus>
-        <input type="text" name="message" placeholder="Type something">
-        <button type="button" name="send">Send</button>
+    
+    <div id="chat">
+      <div id="log"></div>
+      
+      <div id="controls">
+        <p>Say something as <span class="js-chat-nick chat-nick"></span>:
+          <input type="text" name="message" placeholder="Type something">
+          <button type="button" name="send">Send</button>
+      </div>
     </div>
   </body>
 </html>

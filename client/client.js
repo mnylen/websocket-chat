@@ -1,6 +1,6 @@
 // Handles outputting the log
 logHandler = function() {
-  var chatLog = "#chat-log";
+  var chatLog = "#chat > #log";
   
   var createMessageDiv = function(messageObject) {
     return $("<div />").addClass("message")
@@ -23,9 +23,10 @@ logHandler = function() {
 
 // Handles user input
 inputHandler = function() {
-  var sendButton = "#chat-controls button[name='send']";
-  var messageInput = "#chat-controls input[name='message']";
-  var nickInput = "#chat-controls input[name='nick']";
+  var registerButton = "#registration button[name='register']";
+  var sendButton = "#controls button[name='send']";
+  var messageInput = "#controls input[name='message']";
+  var nickInput = "#registration input[name='nick']";
   
   var clearMessageAndFocusIt = function() {
     $(messageInput).attr("value", "");
@@ -50,8 +51,17 @@ inputHandler = function() {
     return chat.sendMessage(messageObject());
   };
    
-  return {    
+  return {
+    getNick: function() {
+      return $(nickInput).attr("value");
+    },
+    
     init: function() {
+      $(registerButton).click(function(event) {
+        event.preventDefault();
+        chat.initializeChat();  
+      });
+      
       $(sendButton).click(function(event) {
         event.preventDefault();
         if (sendMessage()) {
@@ -95,6 +105,15 @@ commHandler = function() {
 
 // The chat module
 chat = function() {
+  var registrationView = "#registration";
+  var chatView = "#chat";
+  
+  var appendNicks = function() {
+    $(".js-chat-nick").each(function(i, v) {
+      $(v).append(inputHandler.getNick());
+    });
+  };
+  
   var validMessageObject = function(messageObject) {
     if (messageObject.nick == "" || messageObject.message == "") {
       return false;
@@ -106,7 +125,15 @@ chat = function() {
   return {
     init: function() {
       inputHandler.init();
-      commHandler.init();
+    },
+    
+    initializeChat: function() {
+      if (inputHandler.getNick() != "") {
+        commHandler.init();
+        appendNicks();
+        $(registrationView).hide();
+        $(chatView).show();
+      }
     },
     
     messageReceived: function(messageObject) {
