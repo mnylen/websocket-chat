@@ -39,12 +39,8 @@ inputHandler = function() {
       "nick" : $(nickInput).attr('value'),
       "message" : $(messageInput).attr('value')
     };
-      
-    if (obj.nick == "" || obj.message == "") {
-      return null;
-    } else {
-      return obj;
-    }
+    
+    return obj;
   };
   
   var sendMessage = function() {
@@ -91,10 +87,22 @@ commHandler = function() {
     chat.messageReceived(messageObject);
   };
   
+  var errorOccured = function(evt) {
+    webSocket.close();
+    
+    if (webSocket.readyState == 2 || webSocket.readyState == 3) {
+      chat.initializationFailed("Connection closed unexpectedly");
+    } else {
+      chat.initializationFailed("An unknown error occured");
+    }
+  };
+  
   return {
     init: function() {
       webSocket = new WebSocket("ws://127.0.0.1:8000");
       webSocket.onmessage = messageReceived; 
+      webSocket.onerror = errorOccured;
+      webSocket.onclose = errorOccured;
     },
     
     serializeAndSend: function(messageObject) {
@@ -134,6 +142,12 @@ chat = function() {
         $(registrationView).hide();
         $(chatView).show();
       }
+    },
+    
+    initializationFailed: function(message) {
+      $(chatView).hide();
+      $(registrationView).show();
+      alert(message);
     },
     
     messageReceived: function(messageObject) {
