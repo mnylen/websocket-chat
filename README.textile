@@ -14,7 +14,9 @@ h2. Usage
 # Install dependencies using *bundler*: <code>bundle install</code>
 # Start the server: <code>$ cd server; ruby server.rb</code>
 # Fire up few browser instances and point them to <code>/[path you cloned it to]/client/chat.html</code>
-# Write your nickname, message and press *Send* - it should appear on other browsers you have started
+# Write your nickname and click *Join chat*.
+# After you've joined, feel free to send messages by pressing *Send*
+# Any messages you send should appear on other browsers you have started
 
 Runs the server on *localhost* on port *8080*. The client is hardcoded to connect to that server and port. If you want to modify these, you need to modify the source.
 
